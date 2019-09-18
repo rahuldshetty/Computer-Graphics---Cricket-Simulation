@@ -2,15 +2,49 @@
 #include <GL/glut.h>
 #include "lib/util.c"
 #include "lib/menu.c"
+#include "lib/batsman.c"
 
 const int WINDOW_HEIGHT = 600 , WINDOW_WIDTH = 600;
 
-void display(){
+int app_state = 0;
+
+GLvoid display(){
     glClear(GL_COLOR_BUFFER_BIT);
 
-    drawMenu();
+    switch (app_state)
+    {
+    case 0:
+         drawMenu();
+        break;
+
+    case 1:
+        drawBatsman();
+        break;
+
+    case 2:
+
+        break;
+    
+    default:
+        break;
+    }
+   
 
     glFlush();
+}
+
+void keyboard(unsigned char key,int x,int y){
+    switch (app_state)
+    {
+    case 0:
+        // handle all menu keys
+        app_state = handleMenuKey(key);
+        glutPostRedisplay();
+        break;
+    
+    default:
+        break;
+    }
 }
 
 
@@ -32,6 +66,7 @@ int main(int argc,char** argv){
     glutCreateWindow("Cricket Simulator");
     glutDisplayFunc(display);
     glutReshapeFunc(reshape);  
+    glutKeyboardFunc(keyboard);
     init();
     glutMainLoop();
     return 0;
