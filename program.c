@@ -1,5 +1,8 @@
+#define PI 3.142
+
 #include <stdio.h>
 #include <GL/glut.h>
+#include<math.h>
 #include "lib/util.c"
 #include "lib/menu.c"
 #include "lib/batsman.c"
