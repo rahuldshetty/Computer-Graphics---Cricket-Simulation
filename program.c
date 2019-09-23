@@ -23,10 +23,6 @@ GLvoid display(){
     case 1:
         drawBatsman();
         break;
-
-    case 2:
-
-        break;
     
     default:
         break;

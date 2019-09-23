@@ -9,6 +9,12 @@ void drawBitmapText(char *string,float x,float y,float z,void *font)
 	}
 }
 
+void load_default(void){
+	glColor3f(0,0,0);
+	glPointSize(1);
+	glLineWidth(1);
+}
+
 void reshape(GLsizei width, GLsizei height) {  // GLsizei for non-negative integer
    // Compute aspect ratio of the new window
    if (height == 0) height = 1;                // To prevent divide by 0
@@ -48,6 +54,7 @@ void drawFilledCircle(GLfloat x, GLfloat y, GLfloat radius){
 			);
 		}
 	glEnd();
+	load_default();
 }
 
 void drawHollowCircle(GLfloat x, GLfloat y, GLfloat radius){
@@ -65,6 +72,7 @@ void drawHollowCircle(GLfloat x, GLfloat y, GLfloat radius){
 			);
 		}
 	glEnd();
+	load_default();
 }
 
 void drawSquareP(float x1,float y1,float x2,float y2){
@@ -74,7 +82,7 @@ void drawSquareP(float x1,float y1,float x2,float y2){
         glVertex2f(x2,y2);
         glVertex2f(x2,y1);
     glEnd();
-
+	load_default();
 }
 
 void drawLine(float x,float y,float w,float z){
@@ -82,4 +90,6 @@ void drawLine(float x,float y,float w,float z){
         glVertex2f(x,y);
         glVertex2f(w,z);
     glEnd();    
+	load_default();
 }
+

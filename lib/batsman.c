@@ -1,12 +1,3 @@
-
-void drawGround(float x1,float y1,float x2,float y2){
-    glBegin(GL_LINES);
-        glVertex2f(x1,y1);
-        glVertex2f(x2,y2);
-    glEnd();
-}
-
-
 void drawArms(int a,int b){
     // left arm
     drawLine( a  + 40, b + 92 , a + 10  , 70 + b  );
@@ -65,8 +56,9 @@ void drawBatsman(){
     drawBitmapText(title, 230  , 580  , 0, font);
 
     // draw ground
-    glColor3f(0,0,0);
+    glColor3f(0,0.8,0.2);
     drawSquareP(0,148,600,0);
+    
 
     drawBody(0,0);
 }

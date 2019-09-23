@@ -3,12 +3,10 @@ void drawPressToStart(){
     int HGAP_USN_NAME = 50;
     int VGAP_ROW = 40;
 
-    char batsman[] = "Press A to play as batsman";
-    char bowler[] = "Press B to play as bowler";
+    char batsman[] = "Press A to start";
 
     glColor3f(0,0,0);
     drawBitmapText(batsman, 100 + HGAP_USN_NAME , 280 + VGAP_ROW  , 0 ,fontMenu );
-    drawBitmapText(bowler, 100 + HGAP_USN_NAME , 250 + VGAP_ROW , 0 ,fontMenu );
     
 }
 
@@ -52,10 +50,6 @@ int handleMenuKey(unsigned char key){
     {
         // start batsman 
         return 1;
-    }
-    else if(key=='B' || key=='b'){
-        // start bowler
-        return 2;
     }
     else{
         return 0;
