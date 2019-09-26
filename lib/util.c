@@ -97,3 +97,12 @@ void drawLine(float x,float y,float w,float z){
 	load_default();
 }
 
+void drawPolygon(float points[][2],int n){
+    glBegin(GL_POLYGON);
+		for(int i=0;i<n;i++)
+		{
+ 			glVertex2f(points[i][0],points[i][1]);
+		}
+    glEnd();
+	load_default();
+}
