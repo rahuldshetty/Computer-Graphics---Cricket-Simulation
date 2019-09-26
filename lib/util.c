@@ -9,6 +9,10 @@ void drawBitmapText(char *string,float x,float y,float z,void *font)
 	}
 }
 
+double conv2seconds( clock_t t ){
+	return ((double)t)/CLOCKS_PER_SEC;
+}
+
 void load_default(void){
 	glColor3f(0,0,0);
 	glPointSize(1);
@@ -28,13 +32,13 @@ void reshape(GLsizei width, GLsizei height) {  // GLsizei for non-negative integ
    glLoadIdentity();             // Reset the projection matrix
    if (width > height) {
      // aspect >= 1, set the height from -1 to 1, with larger width
-      gluOrtho2D(  -(width/2.0 - 300) , 600 + (width/2.0 - 300) , -(height/2.0 - 300), 600.0 + (height/2.0 - 300));
+      gluOrtho2D(  -(width/2.0 - 400) , 800 + (width/2.0 - 400) , -(height/2.0 - 400), 800.0 + (height/2.0 - 400));
    } else if(height > width){
       // aspect < 1, set the width to -1 to 1, with larger height
-     gluOrtho2D( 0, 600 , -(height/2.0 - 300), 600.0 + (height/2.0 - 300));
+     gluOrtho2D( 0, 800 , -(height/2.0 - 400), 800.0 + (height/2.0 - 400));
    }
    else{
-      gluOrtho2D(0, 600.0, 0, 600.0 );
+      gluOrtho2D(0, 800.0, 0, 800.0 );
    }
 }
 

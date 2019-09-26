@@ -1,13 +1,16 @@
 void *fontMenu = GLUT_BITMAP_TIMES_ROMAN_24;
+
+float r=1,g=0,b=0;
+
 void drawPressToStart(){
     int HGAP_USN_NAME = 50;
     int VGAP_ROW = 40;
-
     char batsman[] = "Press A to start";
-
-    glColor3f(0,0,0);
-    drawBitmapText(batsman, 100 + HGAP_USN_NAME , 280 + VGAP_ROW  , 0 ,fontMenu );
-    
+    glColor3f(r,g,b);
+    drawBitmapText(batsman, 280 + HGAP_USN_NAME , 475 + VGAP_ROW  , 0 ,fontMenu );   
+    r = (rand()%257) / 256.0;
+    g = (rand()%257) / 256.0;
+    b = (rand()%257) / 256.0; 
 }
 
 void drawMenu(){
@@ -26,20 +29,20 @@ void drawMenu(){
     // usn - name
     //   title
     
-    int HGAP_USN_NAME = 180;
+    int HGAP_USN_NAME = 230;
     int VGAP_ROW = 40;
 
-    drawBitmapText(usn3, 100 , 400 , 0 ,fontMenu );
-    drawBitmapText(usn2, 100 , 400 + VGAP_ROW * 1 , 0 ,fontMenu );
-    drawBitmapText(usn1, 100 , 400 + VGAP_ROW * 2 , 0,fontMenu  );
+    drawBitmapText(usn3, 200 , 600 , 0 ,fontMenu );
+    drawBitmapText(usn2, 200 , 600 + VGAP_ROW * 1 , 0 ,fontMenu );
+    drawBitmapText(usn1, 200 , 600 + VGAP_ROW * 2 , 0,fontMenu  );
     
 
-    drawBitmapText(name3, 100 + HGAP_USN_NAME , 400 , 0 ,fontMenu);
-    drawBitmapText(name2, 100 + HGAP_USN_NAME , 400 + VGAP_ROW * 1 , 0 ,fontMenu );
-    drawBitmapText(name1, 100 + HGAP_USN_NAME , 400 + VGAP_ROW * 2 , 0  ,fontMenu);
+    drawBitmapText(name3, 200 + HGAP_USN_NAME , 600 , 0 ,fontMenu);
+    drawBitmapText(name2, 200 + HGAP_USN_NAME , 600 + VGAP_ROW * 1 , 0 ,fontMenu );
+    drawBitmapText(name1, 200 + HGAP_USN_NAME , 600 + VGAP_ROW * 2 , 0  ,fontMenu);
 
     glColor3f(0.0,0.0,1.0);
-    drawBitmapText(title, 180  , 400 - VGAP_ROW*1  , 0,fontMenu);
+    drawBitmapText(title, 305  , 600 - VGAP_ROW*1  , 0,fontMenu);
 
     drawPressToStart();
 

@@ -28,7 +28,7 @@ void drawArms(int a,int b){
 
 }
 
-void drawBody(int a,int b){
+void drawBatter(int a,int b){
     GLfloat x = 60 + a , y = 148 + b;
     // head
     drawHollowCircle( x + 40 ,117 + y,25);
@@ -41,8 +41,23 @@ void drawBody(int a,int b){
     drawLine( x + 70 , y  , x + 40, y + 42 );    
 
     drawArms(x,y);
-
 }
+
+
+
+void drawWicket(int x,int y){
+    float width = 3.9;
+    glLineWidth(width);
+    drawLine( 50 + x, y + 148 , x + 50 , y + 215 );
+    glLineWidth(width);
+    drawLine( 58 + x, y + 148 , x + 58 , y + 215 );
+    glLineWidth(width);
+    drawLine( 66 + x, y + 148 , x + 66 , y + 215 );
+
+    glLineWidth(width-1.2);
+    drawLine( 50 + x, y + 215 , x + 66 , y + 215 );
+}
+
 
 
 void drawBatsman(){
@@ -56,10 +71,15 @@ void drawBatsman(){
     drawBitmapText(title, 230  , 580  , 0, font);
 
     // draw ground
-    glColor3f(0,0.8,0.2);
-    drawSquareP(0,148,600,0);
+    glColor3f(0,0.75,0.2);
+    drawSquareP(0,148,800,0);
+    
+    drawWicket(-15,0);
+
+    drawBatter(0,0);
+
     
 
-    drawBody(0,0);
+
 }
 

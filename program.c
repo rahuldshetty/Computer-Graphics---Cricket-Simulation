@@ -1,8 +1,12 @@
 #define PI 3.142
 
 #include <stdio.h>
-#include <GL/glut.h>
+#include <time.h> 
 #include<math.h>
+#include <stdlib.h> 
+
+#include <GL/glut.h>
+
 #include "lib/util.c"
 #include "lib/menu.c"
 #include "lib/batsman.c"
@@ -29,7 +33,7 @@ GLvoid display(){
     }
    
 
-    glFlush();
+    glutSwapBuffers();
 }
 
 void keyboard(unsigned char key,int x,int y){
@@ -53,16 +57,18 @@ void init(){
     glPointSize(1.0);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluOrtho2D(0.0,600.0,0.0,600.0);
+    gluOrtho2D(0.0,800.0,0.0,800.0);
 }
 
 
 int main(int argc,char** argv){
+    srand(time(0)); 
+
     glutInit(&argc,argv);
-    glutInitDisplayMode(GLUT_SINGLE|GLUT_RGB);
+    glutInitDisplayMode(GLUT_DOUBLE|GLUT_RGB);
     glutInitWindowSize(WINDOW_WIDTH,WINDOW_HEIGHT);
     glutInitWindowPosition(0,0);
-    glutCreateWindow("Cricket Simulator");
+    glutCreateWindow("Cricket Simulation");
     glutDisplayFunc(display);
     glutReshapeFunc(reshape);  
     glutKeyboardFunc(keyboard);
