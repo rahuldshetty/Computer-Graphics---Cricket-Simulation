@@ -127,12 +127,6 @@ void drawBowler(int a,int b){
 void drawBatsman(){
     glColor3f(1.0,0.0,0.0);
     
-    //drawing texts
-    char title[] = "You are Batting now.";
-    void *font = GLUT_BITMAP_HELVETICA_18; 
-    int HGAP_USN_NAME = 180;    
-    int VGAP_ROW = 40;
-    drawBitmapText(title, 230  , 580  , 0, font);
 
     // draw ground
     glColor3f(0,0.75,0.2);
