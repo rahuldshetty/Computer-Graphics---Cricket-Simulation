@@ -20,7 +20,7 @@ void drawPressToStart(){
         oldclock = clock(); 
         timer = 1;
     }    
-    else if(conv2seconds(clock()-oldclock) >= 0.25 )
+    else if(conv2seconds(clock()-oldclock) >= 0.75 )
     {
         timer = 0;
         oldclock = clock();

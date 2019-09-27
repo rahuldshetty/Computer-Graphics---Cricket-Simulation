@@ -45,6 +45,11 @@ void keyboard(unsigned char key,int x,int y){
         glutPostRedisplay();
         break;
     
+    case 1:
+        app_state = handleGameKey(key);
+        glutPostRedisplay();
+        break;
+    
     default:
         break;
     }

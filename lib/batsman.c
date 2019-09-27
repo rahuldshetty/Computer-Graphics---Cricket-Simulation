@@ -70,8 +70,13 @@ void drawBowlerArms(int a,int b){
 
 }
 
+// components to handle movement of bowler on key press
+float bowler_x_speed = 0, bowler_y_speed = 0,factor = 0.8;
+float leftLeg  = 0, rightLeg = 0;
+int rotateLegs = 0,lowlimit = 300 * (0.2/factor) ,uplimit = 750 * (0.2/factor);
+
 void drawBowler(int a,int b){
-    GLfloat x = 720 + a , y = 148 + b;
+    GLfloat x = 720 + a + bowler_x_speed , y = 148 + b + bowler_y_speed;
     // head
     drawHollowCircle( x + 40 ,117 + y,25);
 
@@ -79,11 +84,45 @@ void drawBowler(int a,int b){
     drawLine(x + 40, y + 92 , x + 40, 42 + y );
 
     // legs
-    drawLine( x , y, x + 40, y + 42 );
-    drawLine( x + 70 , y  , x + 40, y + 42 );    
+    drawLine( x + leftLeg, y, x + 40, y + 42 );
+    drawLine( x + 70 + rightLeg , y  , x + 40, y + 42 );    
 
     drawBowlerArms(x,y);
+
+    if( 720 + a + bowler_x_speed <= 600)
+    {
+        bowler_x_speed = 0.0;
+        leftLeg = 0;
+        rightLeg = 0;
+        rotateLegs = 0;
+    }
+    else if( bowler_x_speed <= -factor)
+    {
+        bowler_x_speed -= factor;
+        if(  rotateLegs <= lowlimit  )
+        {
+            leftLeg += factor;
+            rightLeg -= factor;
+        }   
+        else if(rotateLegs < uplimit  )
+        {
+            leftLeg -= factor; 
+            rightLeg += factor;
+        }
+        else if(rotateLegs >= uplimit)
+        {
+            rotateLegs = 0 ; 
+            leftLeg += factor;
+            rightLeg -= factor;
+        }
+        rotateLegs += 1 ;
+      
+
+    }
+        
+    glutPostRedisplay();
 }
+
 
 void drawBatsman(){
     glColor3f(1.0,0.0,0.0);
@@ -125,3 +164,11 @@ void drawBatsman(){
 
 }
 
+
+int handleGameKey(unsigned char key){
+    if(key == 's' || key =='S')
+    {
+        bowler_x_speed -= factor;
+    }
+    return 1;
+}
