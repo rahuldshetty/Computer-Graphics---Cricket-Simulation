@@ -2,15 +2,37 @@ void *fontMenu = GLUT_BITMAP_TIMES_ROMAN_24;
 
 float r=1,g=0,b=0;
 
+
+int timer = 0;
+clock_t oldclock;
+
 void drawPressToStart(){
     int HGAP_USN_NAME = 50;
     int VGAP_ROW = 40;
     char batsman[] = "Press A to start";
-    glColor3f(r,g,b);
-    drawBitmapText(batsman, 280 + HGAP_USN_NAME , 475 + VGAP_ROW  , 0 ,fontMenu );   
-    r = (rand()%257) / 256.0;
-    g = (rand()%257) / 256.0;
-    b = (rand()%257) / 256.0; 
+    if(timer==0){
+        glColor3f(r,g,b);
+        drawBitmapText(batsman, 280 + HGAP_USN_NAME , 475 + VGAP_ROW  , 0 ,fontMenu );   
+        r = (rand()%257) / 256.0;
+        g = (rand()%257) / 256.0;
+        b = (rand()%257) / 256.0;
+        glutPostRedisplay();
+        oldclock = clock(); 
+        timer = 1;
+    }    
+    else if(conv2seconds(clock()-oldclock) >= 0.25 )
+    {
+        timer = 0;
+        oldclock = clock();
+        glColor3f(r,g,b);
+        drawBitmapText(batsman, 280 + HGAP_USN_NAME , 475 + VGAP_ROW  , 0 ,fontMenu );   
+        glutPostRedisplay();
+    }
+    else{
+        glColor3f(r,g,b);
+        drawBitmapText(batsman, 280 + HGAP_USN_NAME , 475 + VGAP_ROW  , 0 ,fontMenu );   
+        glutPostRedisplay();
+    }
 }
 
 void drawMenu(){
@@ -45,7 +67,6 @@ void drawMenu(){
     drawBitmapText(title, 305  , 600 - VGAP_ROW*1  , 0,fontMenu);
 
     drawPressToStart();
-
 }
 
 int handleMenuKey(unsigned char key){
