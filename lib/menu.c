@@ -2,7 +2,6 @@ void *fontMenu = GLUT_BITMAP_TIMES_ROMAN_24;
 
 float r=1,g=0,b=0;
 
-
 int timer = 0;
 clock_t oldclock;
 

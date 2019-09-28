@@ -123,6 +123,75 @@ void drawBowler(int a,int b){
     glutPostRedisplay();
 }
 
+void drawLights(int x,int y)
+{
+    int dx = 10, dy=10;
+    int rows = 10,cols = 10;
+    for(int i=0;i<rows;i++)
+        for(int j=0;j<cols;j++)
+        {
+            glColor3f(0,0,0);
+            glLineWidth(1.4);
+            glBegin(GL_LINE_LOOP);
+                glVertex2f(x + dx*i , y - dy*j );
+                glVertex2f(x + dx*(i+1) , y - dy*j );
+                glVertex2f(x + dx*(i+1) , y - dy*(j+1)  );
+                glVertex2f(x + dx*i , y - dy*(j+1) );
+            glEnd();            
+        }
+    
+    glColor3f(0,0,0);
+    drawSquareP( x + (cols/2)*dx - 10 , y - (rows*dy), x + (cols/2)*dx + 10 , 400  );
+
+    load_default();
+}
+
+clock_t oldstring = clock();
+void drawStrings(){
+
+    if( conv2seconds(clock() - oldstring ) < 0.5  )
+    {
+        glColor3f(1,1,1);
+    }   
+    else if( conv2seconds(clock() - oldstring) < 1 ){
+        glColor3f(0.5,0.5,0.5);
+    }
+    else {
+        oldstring = clock();
+    }
+
+
+    void *fontMenu = GLUT_BITMAP_9_BY_15;
+    char match_name[] = "INDIA VS ENGLAND";
+    unsigned char string[] = "INDIA VS ENGLAND";
+    int size_string = glutBitmapLength(fontMenu, string);
+    float newloc = 250 + (150 - size_string/2.0  );
+    drawBitmapText(match_name, newloc, 450  ,0,fontMenu);
+    load_default(); 
+}
+
+void drawStadium(){
+
+    // gray background
+    glColor3f(0.75,0.75,0.75);
+    drawSquareP(0,400,800,200);
+
+    //box cooordinated: TL:(250,500) BR:(550,350)
+
+    // board
+    glColor3f(0.2,0.2,0.2);
+    drawSquareP(245,505,555,345);
+    glColor3f(0,0,0);
+    drawSquareP(250,500,550,350);
+
+    // blinking text effect
+    drawStrings();
+
+    // draw ligths
+    drawLights(80,550);
+    drawLights(635,550);
+}
+
 
 void drawBatsman(){
     glColor3f(1.0,0.0,0.0);
@@ -131,6 +200,15 @@ void drawBatsman(){
     // draw ground
     glColor3f(0,0.75,0.2);
     drawSquareP(0,200,800,0);
+
+    // draw 6 line
+    glColor3f(1,1,1);
+    glLineWidth(1);
+    drawLine(0,195,800,195);
+    
+    // drawing back stadium
+    drawStadium();
+
 
     // draw pit
     float points[][2] = { { 15,160 },{4,125},{739,125},{750,160} };
