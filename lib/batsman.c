@@ -58,16 +58,32 @@ void drawWicket(int x,int y){
     drawLine( 50 + x, y + 215  , x + 66 , y + 215 + 10 );
 }
 
+
+// rotation of arm(s)
+float theta = 0, rot_speed = 2;
 void drawBowlerArms(int a,int b){
     // left arm
     drawLine( a  + 40, b + 92 , a + 10  , 70 + b  );
+    
+    float rightArmXEnd = a + 40 + 30 ;
+    float rightArmYEnd = 70 + b ;
+
+    float tx = getXAfterRotation(rightArmXEnd, rightArmYEnd, a  + 40, b + 92, theta);
+    float ty = getYAfterRotation(rightArmXEnd, rightArmYEnd, a  + 40, b + 92, theta);
+    
     //right arm
-    drawLine( a  + 40, b + 92 , a + 40 + 30  , 70 + b  );
+    drawLine( a  + 40, b + 92 , tx  , ty  );
+
+    
 
     // draw small bowl
     glColor3f( 1 , 0 , 0.15 );
-    drawFilledCircle( a + 40 + 30 , b + 70 , 8 );
+    drawFilledCircle( tx , ty , 8 );
 
+    if(theta!=0)
+    {
+        theta += rot_speed;
+    }
 }
 
 // components to handle movement of bowler on key press
@@ -91,6 +107,7 @@ void drawBowler(int a,int b){
 
     if( 720 + a + bowler_x_speed <= 600)
     {
+        // when the bowler reaches the crease
         bowler_x_speed = 0.0;
         leftLeg = 0;
         rightLeg = 0;
@@ -241,6 +258,7 @@ int handleGameKey(unsigned char key){
     if(key == 's' || key =='S')
     {
         bowler_x_speed -= factor;
+        theta += rot_speed;
     }
     return 1;
 }

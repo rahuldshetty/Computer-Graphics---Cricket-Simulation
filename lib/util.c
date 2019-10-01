@@ -106,3 +106,32 @@ void drawPolygon(float points[][2],int n){
     glEnd();
 	load_default();
 }
+
+float getXAfterRotation(float x,float y, float pivotx, float pivoty, float theta){
+	// convert to radians
+	theta = theta * 3.142 / 180;
+	
+	float effective=0;
+
+	float m = pivotx*(1-cos(theta)) + pivoty*sin(theta);
+	//float n = pivoty*(1-cos(theta)) - pivotx*sin(theta);
+
+	effective = cos(theta)*x - sin(theta)*y + m;
+	
+	return effective;
+}
+
+
+float getYAfterRotation(float x,float y, float pivotx, float pivoty, float theta){
+	// convert to radians
+	theta = theta * 3.142 / 180;
+	
+	float effective=0;
+
+	//float m = pivotx*(1-cos(theta)) + pivoty*sin(theta);
+	float n = pivoty*(1-cos(theta)) - pivotx*sin(theta);
+
+	effective = sin(theta)*x + cos(theta)*y + n;
+	
+	return effective;
+}
