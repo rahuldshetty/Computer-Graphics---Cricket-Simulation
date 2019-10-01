@@ -61,6 +61,10 @@ void drawWicket(int x,int y){
 
 // rotation of arm(s)
 float theta = 0, rot_speed = 2;
+float ballposx = 0, ballposy=0;
+float ballspeedx = -4, ballspeedy = -2;
+int isthrown = 0;
+float offsety = 0;
 void drawBowlerArms(int a,int b){
     // left arm
     drawLine( a  + 40, b + 92 , a + 10  , 70 + b  );
@@ -74,16 +78,53 @@ void drawBowlerArms(int a,int b){
     //right arm
     drawLine( a  + 40, b + 92 , tx  , ty  );
 
-    
-
-    // draw small bowl
-    glColor3f( 1 , 0 , 0.15 );
-    drawFilledCircle( tx , ty , 8 );
-
-    if(theta!=0)
-    {
-        theta += rot_speed;
+    if(isthrown==0){
+        if(theta!=0 && theta <= 250 )
+        {
+            theta += rot_speed;
+            // draw small bowl
+            glColor3f( 1 , 0 , 0.15 );
+            drawFilledCircle( tx , ty , 8 );
+        }
+        else if(theta>250){
+            // throw the ball
+            theta = 0;
+            isthrown = 1;
+            ballposx = tx;
+            ballposy = ty;
+            offsety = ty - 0.5 ;
+        }
+        else{
+            theta = 0;
+            // draw small bowl
+            glColor3f( 1 , 0 , 0.15 );
+            drawFilledCircle( tx , ty , 8 );
+        }
     }
+    else{
+        // ball in thrown state
+        glColor3f( 1 , 0 , 0.15 );
+        drawFilledCircle( ballposx , ballposy , 8 );
+        ballposx+= ballspeedx;
+        ballposy+= ballspeedy;
+        if(ballposy <= 150){
+            ballspeedy = 2;
+        }
+        else if(ballposy >= offsety )
+        {
+            offsety -= 1.9;
+            ballspeedy = -2;
+        }
+
+    
+        if(ballposx <= 10 ){
+            // reset if gone behind
+            // test purpose
+            isthrown = 0;
+        }   
+
+    }
+    
 }
 
 // components to handle movement of bowler on key press
