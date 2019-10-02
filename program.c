@@ -11,7 +11,7 @@
 #include "lib/menu.c"
 #include "lib/batsman.c"
 
-const int WINDOW_HEIGHT = 600 , WINDOW_WIDTH = 600;
+const int WINDOW_HEIGHT = 800 , WINDOW_WIDTH = 800;
 
 int app_state = 0;
 

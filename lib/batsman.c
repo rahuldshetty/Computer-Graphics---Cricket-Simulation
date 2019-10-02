@@ -1,7 +1,15 @@
+float batterwidth = 4;
+float bowlerwidth = 4;
 void drawArms(int a,int b){
     // left arm
+    glColor3f(0,0.74,1);
+    glLineWidth(batterwidth);
+    glPointSize(batterwidth);
     drawLine( a  + 40, b + 92 , a + 10  , 70 + b  );
     //right arm
+    glColor3f(0,0.74,1);
+    glLineWidth(batterwidth);
+    glPointSize(batterwidth);
     drawLine( a  + 40, b + 82 , a + 10  , 60 + b  );
 
     // bat handle
@@ -25,22 +33,34 @@ void drawArms(int a,int b){
         glVertex2f(a+7,b+57);
         glColor3f(0,0,0);
     glEnd();
-
 }
 
 void drawBatter(int a,int b){
+    glColor3f(0,0.74,1);
+    glLineWidth(batterwidth);
+    glPointSize(batterwidth);
     GLfloat x = 60 + a , y = 148 + b;
     // head
-    drawHollowCircle( x + 40 ,117 + y,25);
-
+    drawFilledCircle( x + 40 ,117 + y,25);
+    
     // torso
+    glColor3f(0,0.74,1);
+    glLineWidth(batterwidth);
+    glPointSize(batterwidth);
     drawLine(x + 40, y + 92 , x + 40, 42 + y );
 
     // legs
+    glColor3f(0,0.74,1);
+    glLineWidth(batterwidth);
+    glPointSize(batterwidth);
     drawLine( x , y, x + 40, y + 42 );
+    glColor3f(0,0.74,1);
+    glLineWidth(batterwidth);
+    glPointSize(batterwidth);
     drawLine( x + 70 , y  , x + 40, y + 42 );    
 
     drawArms(x,y);
+    load_default();
 }
 
 
@@ -67,6 +87,9 @@ int isthrown = 0;
 float offsety = 0;
 void drawBowlerArms(int a,int b){
     // left arm
+    glColor3f(0.10,0.0,0.0);
+    glLineWidth(bowlerwidth);
+    glPointSize(bowlerwidth);
     drawLine( a  + 40, b + 92 , a + 10  , 70 + b  );
     
     float rightArmXEnd = a + 40 + 30 ;
@@ -76,6 +99,9 @@ void drawBowlerArms(int a,int b){
     float ty = getYAfterRotation(rightArmXEnd, rightArmYEnd, a  + 40, b + 92, theta);
     
     //right arm
+    glColor3f(0.10,0.0,0.0);
+    glLineWidth(bowlerwidth);
+    glPointSize(bowlerwidth);
     drawLine( a  + 40, b + 92 , tx  , ty  );
 
     if(isthrown==0){
@@ -133,15 +159,32 @@ float leftLeg  = 0, rightLeg = 0;
 int rotateLegs = 0,lowlimit = 300 * (0.2/factor) ,uplimit = 750 * (0.2/factor);
 
 void drawBowler(int a,int b){
+    glColor3f(0.10,0.0,0.0);
+    glLineWidth(bowlerwidth);
+    glPointSize(bowlerwidth);
+    
     GLfloat x = 720 + a + bowler_x_speed , y = 148 + b + bowler_y_speed;
     // head
-    drawHollowCircle( x + 40 ,117 + y,25);
+    glColor3f(0.10,0.0,0.0);
+    glLineWidth(bowlerwidth);
+    glPointSize(bowlerwidth);
+    drawFilledCircle( x + 40 ,117 + y,25);
 
     // torso
+    glColor3f(0.10,0.0,0.0);
+    glLineWidth(bowlerwidth);
+    glPointSize(bowlerwidth);
     drawLine(x + 40, y + 92 , x + 40, 42 + y );
 
     // legs
+    glColor3f(0.10,0.0,0.0);
+    glLineWidth(bowlerwidth);
+    glPointSize(bowlerwidth);
     drawLine( x + leftLeg, y, x + 40, y + 42 );
+
+    glColor3f(0.10,0.0,0.0);
+    glLineWidth(bowlerwidth);
+    glPointSize(bowlerwidth);
     drawLine( x + 70 + rightLeg , y  , x + 40, y + 42 );    
 
     drawBowlerArms(x,y);
@@ -177,7 +220,7 @@ void drawBowler(int a,int b){
       
 
     }
-        
+    load_default();
     glutPostRedisplay();
 }
 
@@ -228,6 +271,64 @@ void drawStrings(){
     load_default(); 
 }
 
+void drawMesh(int x,int y){
+    int dx = 10, dy=10;
+    int rows = 80,cols = 5;
+    for(int i=0;i<rows;i++)
+        for(int j=0;j<cols;j++)
+        {
+            glLineWidth(2);
+            glBegin(GL_LINE_LOOP);
+                glVertex2f(x + dx*i , y + dy*j );
+                glVertex2f(x + dx*(i+1) , y + dy*j );
+                glVertex2f(x + dx*(i+1) , y + dy*(j+1)  );
+                glVertex2f(x + dx*i , y + dy*(j+1) );
+            glEnd();            
+        }
+    load_default();
+}
+
+void drawperson(int x,int y)
+{
+    // total size = div
+    int personWidth = 15,personBodyHeight = 15;
+    int head=5;
+    glColor3f(0,0,0);
+    drawSquareP(x,y, x + personWidth, y + personBodyHeight  );
+    
+    float r = 0.928 , g = 0.734 , b = 0.7013 ;
+    glColor3f(r,g,b);
+    drawFilledCircle( x + personWidth/2, personBodyHeight + y + head, head  );   
+
+    // drawing hands
+    glColor3f(0,0,0);
+    if(rand()%5 <= 1){
+        drawLine( x , y + personBodyHeight,  x - 5 , y + 2  );
+        drawLine( x + personWidth , y + personBodyHeight,  x + personWidth +  5 , y + 2  );
+    }
+       
+    else{
+        drawLine( x , y + personBodyHeight, x - 5 , y +  personBodyHeight + 5   );
+        drawLine( x + personWidth , y + personBodyHeight,  x + personWidth +  5 , y + personBodyHeight + 5  );
+    }
+     
+}
+
+void drawStands(int x,int y){
+    int div = 25;
+    int last = 800;
+   
+    for(int i=y;i<400;i+=div)
+    {
+        glColor3f(0.65,0.65,0.65);
+        drawLine(0,i,last,i);
+        for(int w=15;w<800;w+=40)
+        {
+            drawperson(w,i);
+        }
+    }
+}
+
 void drawStadium(){
 
     // gray background
@@ -235,6 +336,14 @@ void drawStadium(){
     drawSquareP(0,400,800,200);
 
     //box cooordinated: TL:(250,500) BR:(550,350)
+
+    // draw ligths
+    drawLights(80,550);
+    drawLights(635,550);
+
+
+    // draw 
+    drawStands(0,200);
 
     // board
     glColor3f(0.2,0.2,0.2);
@@ -245,9 +354,9 @@ void drawStadium(){
     // blinking text effect
     drawStrings();
 
-    // draw ligths
-    drawLights(80,550);
-    drawLights(635,550);
+    // draw net
+    glColor3f(1,1,1);
+    drawMesh( 0,200 );
 }
 
 
