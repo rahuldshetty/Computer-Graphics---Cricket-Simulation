@@ -444,7 +444,7 @@ void drawStands(int x,int y){
     }
 }
 
-void drawStadium(){
+void drawStadium(int show_score){
 
     // gray background
     glColor3f(0.75,0.75,0.75);
@@ -460,18 +460,21 @@ void drawStadium(){
     // draw 
     drawStands(0,200);
 
-    // board
-    glColor3f(0.2,0.2,0.2);
-    drawSquareP(245,505,555,345);
-    glColor3f(0,0,0);
-    drawSquareP(250,500,550,350);
+    if(show_score){
+        // board
+        glColor3f(0.2,0.2,0.2);
+        drawSquareP(245,505,555,345);
+        glColor3f(0,0,0);
+        drawSquareP(250,500,550,350);
 
-    // blinking text effect
-    drawStrings();
+        // blinking text effect
+        drawStrings();
 
-    // draw net
-    glColor3f(1,1,1);
-    drawMesh( 0,200 );
+        // draw net
+        glColor3f(1,1,1);
+        drawMesh( 0,200 );
+    }
+    
 }
 
 
@@ -489,7 +492,7 @@ void drawBatsman(){
     drawLine(0,195,800,195);
     
     // drawing back stadium
-    drawStadium();
+    drawStadium(1);
 
 
     // draw pit
