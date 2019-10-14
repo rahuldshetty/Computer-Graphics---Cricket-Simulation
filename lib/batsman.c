@@ -2,44 +2,118 @@ float batterwidth = 4;
 float bowlerwidth = 4;
 int runs = 0;
 
+// bowl movements
+float theta = 0, rot_speed = 2;
+float ballposx = 0, ballposy=0;
+float ballspeedx = -8, ballspeedy = -2;
+int isthrown = 0;
+float offsety = 0;
 
+// batter arm movement
+float bat_theta = 0;
+float const_bat_add = 1.25;
+int called_one = 0;
+float max_bat_angle = 150;
+
+// components to handle movement of bowler on key press
+float bowler_x_speed = 0, bowler_y_speed = 0,factor = 0.8;
+float leftLeg  = 0, rightLeg = 0;
+int rotateLegs = 0,lowlimit = 300 * (0.2/factor) ,uplimit = 750 * (0.2/factor);
+
+clock_t oldstring = clock();
 
 void drawArms(int a,int b){
     // left arm
     glColor3f(0,0.74,1);
     glLineWidth(batterwidth);
     glPointSize(batterwidth);
-    drawLine( a  + 40, b + 92 , a + 10  , 70 + b  );
+    float tempvar1 = getXAfterRotation( a + 10, 70 + b, a  + 40, b + 92, bat_theta );
+    float tempvar2 = getYAfterRotation( a + 10, 70 + b, a  + 40, b + 92, bat_theta );
+    drawLine( a  + 40, b + 92 , tempvar1  , tempvar2  );
+    
+    
     //right arm
     glColor3f(0,0.74,1);
     glLineWidth(batterwidth);
     glPointSize(batterwidth);
-    drawLine( a  + 40, b + 82 , a + 10  , 60 + b  );
+    tempvar1 = getXAfterRotation( a + 10, 60 + b, a  + 40, b + 82, bat_theta );
+    tempvar2 = getYAfterRotation( a + 10, 60 + b, a  + 40, b + 82, bat_theta );
+    drawLine( a  + 40, b + 82 , tempvar1  , tempvar2  );
 
     // bat handle
+    float ax07 = getXAfterRotation( a + 7, 57 + b, a  + 40, b + 82, bat_theta );
+    float ay07 = getYAfterRotation( a + 7, 57 + b, a  + 40, b + 82, bat_theta );
+
+    float ax17 = getXAfterRotation( a + 7, 73 + b, a  + 40, b + 82, bat_theta );
+    float ay173 = getYAfterRotation( a + 7, 73 + b, a  + 40, b + 82, bat_theta );
+    
+    float ax213 = getXAfterRotation( a + 13, 73 + b, a  + 40, b + 82, bat_theta );
+    float ay273 = getYAfterRotation( a + 13, 73 + b, a  + 40, b + 82, bat_theta );
+
+    float ax413 = getXAfterRotation( a + 13, 57 + b, a  + 40, b + 82, bat_theta );
+    float ay457 = getYAfterRotation( a + 13, 57 + b, a  + 40, b + 82, bat_theta );
+
     glBegin(GL_POLYGON);
         glColor3f(0.64,0.164,0.164);
-        glVertex2f(a+7,b+57);
-        glVertex2f(a+7,b+73);
-        glVertex2f(a+13,b+73);
-        glVertex2f(a+13,b+57);
+        glVertex2f(ax07,ay07);
+        glVertex2f(ax17,ay173);
+        glVertex2f(ax213,ay273);
+        glVertex2f(ax413,ay457);
         glColor3f(0,0,0);
     glEnd();
 
+
     // bat stick
+    float f0x = getXAfterRotation( a + 13, 57 + b, a  + 40, b + 82, bat_theta );
+    float f0y = getYAfterRotation( a + 13, 57 + b, a  + 40, b + 82, bat_theta );
+
+    float f1x = getXAfterRotation( a + 18, 53 + b, a  + 40, b + 82, bat_theta );
+    float f1y = getYAfterRotation( a + 18, 53 + b, a  + 40, b + 82, bat_theta );
+
+    float f2x = getXAfterRotation( a + 18, -5 + b, a  + 40, b + 82, bat_theta );
+    float f2y = getYAfterRotation( a + 18, -5 + b, a  + 40, b + 82, bat_theta );
+
+    float f3x = getXAfterRotation( a + 2, -5 + b, a  + 40, b + 82, bat_theta );
+    float f3y = getYAfterRotation( a + 2, -5 + b, a  + 40, b + 82, bat_theta );
+
+    float f4x = getXAfterRotation( a + 2, 53 + b, a  + 40, b + 82, bat_theta );
+    float f4y = getYAfterRotation( a + 2, 53 + b, a  + 40, b + 82, bat_theta );
+
+    float f5x = getXAfterRotation( a + 7, 57 + b, a  + 40, b + 82, bat_theta );
+    float f5y = getYAfterRotation( a + 7, 57 + b, a  + 40, b + 82, bat_theta );
+
     glBegin(GL_POLYGON);
         glColor3f(0.64,0.164,0.164);
-        glVertex2f(a+13,b+57);
-        glVertex2f(a+18,b+53);
-        glVertex2f(a+18,b-5);
-        glVertex2f(a+2,b-5);
-        glVertex2f(a+2,b+53);
-        glVertex2f(a+7,b+57);
+        glVertex2f(f0x,f0y);
+        glVertex2f(f1x,f1y);
+        glVertex2f(f2x,f2y);
+        glVertex2f(f3x,f3y);
+        glVertex2f(f4x,f4y);
+        glVertex2f(f5x,f5y);
         glColor3f(0,0,0);
     glEnd();
+
+    if(bat_theta > max_bat_angle){
+       called_one = 0;
+       bat_theta = 0;
+    }
+    else if(bat_theta!=0){
+        bat_theta += const_bat_add;
+    }
+    
+}
+
+void checkBowlIncoming(){
+    if(called_one==1 ){
+        bat_theta = const_bat_add;
+        called_one = 0;
+    }
 }
 
 void drawBatter(int a,int b){
+
+    checkBowlIncoming();
+
     glColor3f(0,0.74,1);
     glLineWidth(batterwidth);
     glPointSize(batterwidth);
@@ -63,6 +137,7 @@ void drawBatter(int a,int b){
     glPointSize(batterwidth);
     drawLine( x + 70 , y  , x + 40, y + 42 );    
 
+    // draw arms
     drawArms(x,y);
     load_default();
 }
@@ -84,11 +159,6 @@ void drawWicket(int x,int y){
 
 
 // rotation of arm(s)
-float theta = 0, rot_speed = 2;
-float ballposx = 0, ballposy=0;
-float ballspeedx = -8, ballspeedy = -2;
-int isthrown = 0;
-float offsety = 0;
 void drawBowlerArms(int a,int b){
     // left arm
     glColor3f(0.10,0.0,0.0);
@@ -118,6 +188,7 @@ void drawBowlerArms(int a,int b){
         }
         else if(theta>250){
             // throw the ball
+            called_one = 1;
             theta = 0;
             isthrown = 1;
             ballposx = tx;
@@ -154,13 +225,7 @@ void drawBowlerArms(int a,int b){
         }   
 
     }
-    
 }
-
-// components to handle movement of bowler on key press
-float bowler_x_speed = 0, bowler_y_speed = 0,factor = 0.8;
-float leftLeg  = 0, rightLeg = 0;
-int rotateLegs = 0,lowlimit = 300 * (0.2/factor) ,uplimit = 750 * (0.2/factor);
 
 void drawBowler(int a,int b){
     glColor3f(0.10,0.0,0.0);
@@ -250,8 +315,6 @@ void drawLights(int x,int y)
 
     load_default();
 }
-
-clock_t oldstring = clock();
 
 void drawStrings(){
 
@@ -421,10 +484,9 @@ void drawBatsman(){
     //bowler wicket
     drawWicket(640,0);
 
-    drawBatter(0,0);
-
     drawBowler(0,0);
     
+    drawBatter(0,0);
 
 
 }
