@@ -110,6 +110,16 @@ void checkBowlIncoming(){
     }
 }
 
+void checkBallHit(float a,float b){
+    float res = getXAfterRotation( a + 2, -5 + b, a  + 40, b + 82, bat_theta );
+    if(ballposx < res && isthrown==1 )
+    {
+        ballspeedx = 8;
+        ballspeedy = 4;
+        offsety = 750;
+    }
+}
+
 void drawBatter(int a,int b){
 
     checkBowlIncoming();
@@ -139,6 +149,9 @@ void drawBatter(int a,int b){
 
     // draw arms
     drawArms(x,y);
+    
+    checkBallHit(x,y);
+
     load_default();
 }
 
@@ -218,10 +231,13 @@ void drawBowlerArms(int a,int b){
         }
 
     
-        if(ballposx <= 10 ){
+        if(ballposx <= 10 || ballposy >= 700){
             // reset if gone behind
             // test purpose
             isthrown = 0;
+            ballspeedx = -8;
+            ballspeedy = -2;
+            factor = 0.8;
         }   
 
     }
