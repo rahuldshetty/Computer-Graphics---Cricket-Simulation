@@ -12,8 +12,8 @@ int runs = 0;
 
 #include "lib/util.c"
 #include "lib/menu.c"
-#include "lib/runs.c"
 #include "lib/batsman.c"
+#include "lib/runs.c"
 
 const int WINDOW_HEIGHT = 800 , WINDOW_WIDTH = 800;
 
