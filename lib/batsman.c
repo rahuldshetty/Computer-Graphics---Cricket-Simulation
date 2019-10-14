@@ -1,5 +1,9 @@
 float batterwidth = 4;
 float bowlerwidth = 4;
+int runs = 0;
+
+
+
 void drawArms(int a,int b){
     // left arm
     glColor3f(0,0.74,1);
@@ -82,7 +86,7 @@ void drawWicket(int x,int y){
 // rotation of arm(s)
 float theta = 0, rot_speed = 2;
 float ballposx = 0, ballposy=0;
-float ballspeedx = -4, ballspeedy = -2;
+float ballspeedx = -8, ballspeedy = -2;
 int isthrown = 0;
 float offsety = 0;
 void drawBowlerArms(int a,int b){
@@ -248,6 +252,7 @@ void drawLights(int x,int y)
 }
 
 clock_t oldstring = clock();
+
 void drawStrings(){
 
     if( conv2seconds(clock() - oldstring ) < 0.5  )
@@ -268,6 +273,27 @@ void drawStrings(){
     int size_string = glutBitmapLength(fontMenu, string);
     float newloc = 250 + (150 - size_string/2.0  );
     drawBitmapText(match_name, newloc, 450  ,0,fontMenu);
+
+
+    // convert int Runs to string
+    //Runs
+    char result[50]; 
+    sprintf(result, "%d", runs);
+
+    char new_score_text[100] = "Runs: ";
+    unsigned char new_score_string[100] = "Runs: ";
+    int tlen = 6;
+    for(int i = 0; result[i]!='\0';i++ ){
+        new_score_text[tlen] = result[i];
+        new_score_string[tlen] = result[i];
+        tlen++ ;
+    }
+
+
+    size_string = glutBitmapLength(fontMenu, new_score_string);
+    newloc = 250 + (150 - size_string/2.0  );
+    drawBitmapText(new_score_text, newloc, 430 , 0 ,fontMenu);
+
     load_default(); 
 }
 
