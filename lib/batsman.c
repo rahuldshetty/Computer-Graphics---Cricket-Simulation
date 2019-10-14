@@ -1,6 +1,5 @@
 float batterwidth = 4;
 float bowlerwidth = 4;
-int runs = 0;
 
 // bowl movements
 float theta = 0, rot_speed = 2;
@@ -231,7 +230,7 @@ void drawBowlerArms(int a,int b){
         }
 
     
-        if(ballposx <= 10 || ballposy >= 700){
+        if(ballposx <= 10 ){
             // reset if gone behind
             // test purpose
             isthrown = 0;
@@ -239,6 +238,17 @@ void drawBowlerArms(int a,int b){
             ballspeedy = -2;
             factor = 0.8;
         }   
+
+        if(ballposx >= 800)
+        {
+            isthrown = 0;
+            ballspeedx = -8;
+            ballspeedy = -2;
+            factor = 0.8;
+            // do transition
+            app_state = 2;
+
+        }
 
     }
 }

@@ -7,13 +7,17 @@
 
 #include <GL/glut.h>
 
+int app_state = 0;
+int runs = 0;
+
 #include "lib/util.c"
 #include "lib/menu.c"
+#include "lib/runs.c"
 #include "lib/batsman.c"
 
 const int WINDOW_HEIGHT = 800 , WINDOW_WIDTH = 800;
 
-int app_state = 0;
+
 
 GLvoid display(){
     glClear(GL_COLOR_BUFFER_BIT);
@@ -28,6 +32,11 @@ GLvoid display(){
         drawBatsman();
         break;
     
+    case 2:
+        draw_runs();
+        break;
+
+
     default:
         break;
     }
@@ -50,6 +59,11 @@ void keyboard(unsigned char key,int x,int y){
         glutPostRedisplay();
         break;
     
+    case 2:
+        app_state = handleRunKey(key);
+        glutPostRedisplay();
+        break;
+
     default:
         break;
     }
