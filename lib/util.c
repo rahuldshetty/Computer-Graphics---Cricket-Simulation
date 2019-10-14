@@ -135,3 +135,14 @@ float getYAfterRotation(float x,float y, float pivotx, float pivoty, float theta
 	
 	return effective;
 }
+
+
+
+float getBez4(float a,float b,float c,float d,float t){
+	// t is the value
+	float cub = (1-t)*(1-t)*(1-t);
+	float sec = 3*(1-t)*(1-t)*t;
+	float trd = 3*(1-t)*t*t;
+	float frt = t*t*t;
+	return cub*a + sec*b + trd * c + frt * d;
+}

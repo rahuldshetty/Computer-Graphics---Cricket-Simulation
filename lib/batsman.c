@@ -247,7 +247,17 @@ void drawBowlerArms(int a,int b){
             factor = 0.8;
             // do transition
             app_state = 2;
-
+            ballposx = 0;
+            if(rand()%10 >= 5  ){
+                runs += 6;
+                ballposy = 600 + rand()%50 - rand()%50;
+            }
+               
+            else 
+            {
+                runs += 4;
+                ballposy = 380 + rand()%50 - rand()%50;
+            }
         }
 
     }
