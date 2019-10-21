@@ -21,6 +21,9 @@ int rotateLegs = 0,lowlimit = 300 * (0.2/factor) ,uplimit = 750 * (0.2/factor);
 
 clock_t oldstring = clock();
 
+//key check
+char old_key;
+
 void drawArms(int a,int b){
     // left arm
     glColor3f(0,0.74,1);
@@ -248,15 +251,21 @@ void drawBowlerArms(int a,int b){
             // do transition
             app_state = 2;
             ballposx = 0;
-            if(rand()%10 >= 5  ){
+            if( old_key == '6' ){
                 runs += 6;
-                ballposy = 600 + rand()%50 - rand()%50;
+                ballposy = 600 + rand()%50 - rand()%50; 
             }
                
-            else 
+            else if( old_key == '4')
             {
                 runs += 4;
                 ballposy = 380 + rand()%50 - rand()%50;
+            }
+            else if(old_key=='1')
+            {
+                // Take One Run
+                app_state = 1;
+
             }
         }
 
@@ -532,10 +541,11 @@ void drawBatsman(){
 
 
 int handleGameKey(unsigned char key){
-    if(key == 's' || key =='S')
+    if(key == 's' || key =='S' || key=='4' || key=='6' || key=='1')  
     {
         bowler_x_speed -= factor;
         theta += rot_speed;
     }
+    old_key = key;
     return 1;
 }
