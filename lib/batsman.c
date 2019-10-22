@@ -273,7 +273,6 @@ void draw_second_batsman_Arms(int a,int b,float bat_theta ){
 
 float sbleftLeg  = 0, sbrightLeg = 0, sbrotateLegs = 0,sbatter_x_speed=0;
 void drawSecondBatsman(int a,int b){
-    checkBowlIncoming();
 
     glColor3f(0,0.74,1);
     glLineWidth(batterwidth);
@@ -324,6 +323,16 @@ void drawSecondBatsman(int a,int b){
 
     // draw arms
     draw_second_batsman_Arms(x,y,0);
+
+    if( taking_run == 1 && x <= 60 ){
+        // reset positions of batsman as they reached
+        taking_run = 0;
+        sbatter_x_speed = 0;
+        batter_x_speed = 0;
+        sbleftLeg = 0, sbrotateLegs = 0, sbrightLeg = 0;
+        bleftLeg = 0, brotateLegs = 0, brightLeg = 0;  
+        runs += 1;        
+    }
 
     load_default();
 }
@@ -380,10 +389,12 @@ void drawBowlerArms(int a,int b){
             offsety = ty - 0.5 ;
         }
         else{
-            theta = 0;
-            // draw small bowl
-            glColor3f( 1 , 0 , 0.15 );
-            drawFilledCircle( tx , ty , 8 );
+            if(taking_run == 0){
+                theta = 0;
+                // draw small bowl
+                glColor3f( 1 , 0 , 0.15 );
+                drawFilledCircle( tx , ty , 8 );
+            }
         }
     }
     else{
@@ -402,7 +413,7 @@ void drawBowlerArms(int a,int b){
         }
 
     
-        if(ballposx <= 10 ){
+        if(ballposx <= 10){
             // reset if gone behind
             // test purpose
             isthrown = 0;
