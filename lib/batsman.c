@@ -122,6 +122,11 @@ void checkBallHit(float a,float b){
     }
 }
 
+int taking_run = 0;
+float batter_x_speed=0;
+float batter_factor = 1.2;
+float bleftLeg  = 0, brightLeg = 0, brotateLegs = 0;
+float blowlimit =  300 * (0.2/batter_factor) ,buplimit =  600 * (0.2/batter_factor);
 void drawBatter(int a,int b){
 
     checkBowlIncoming();
@@ -129,7 +134,7 @@ void drawBatter(int a,int b){
     glColor3f(0,0.74,1);
     glLineWidth(batterwidth);
     glPointSize(batterwidth);
-    GLfloat x = 60 + a , y = 148 + b;
+    GLfloat x = 60 + a + batter_x_speed, y = 148 + b;
     // head
     drawFilledCircle( x + 40 ,117 + y,25);
     
@@ -143,11 +148,35 @@ void drawBatter(int a,int b){
     glColor3f(0,0.74,1);
     glLineWidth(batterwidth);
     glPointSize(batterwidth);
-    drawLine( x , y, x + 40, y + 42 );
+    drawLine( x + bleftLeg , y, x + 40, y + 42 );
     glColor3f(0,0.74,1);
     glLineWidth(batterwidth);
     glPointSize(batterwidth);
-    drawLine( x + 70 , y  , x + 40, y + 42 );    
+    drawLine( x + 70 + brightLeg , y  , x + 40, y + 42 );    
+
+
+    if( taking_run )
+    {
+        batter_x_speed += batter_factor;
+        if(  brotateLegs <= blowlimit  )
+        {
+            bleftLeg += batter_factor;
+            brightLeg -= batter_factor;
+        }   
+        else if(brotateLegs < buplimit  )
+        {
+            bleftLeg -= batter_factor; 
+            brightLeg += batter_factor;
+        }
+        else if(brotateLegs >= buplimit)
+        {
+            brotateLegs = 0 ; 
+            bleftLeg += batter_factor;
+            brightLeg -= batter_factor;
+        }
+        brotateLegs += 1 ;
+    }
+
 
     // draw arms
     drawArms(x,y);
@@ -158,6 +187,146 @@ void drawBatter(int a,int b){
 }
 
 
+void draw_second_batsman_Arms(int a,int b,float bat_theta ){
+    // left arm
+    glColor3f(0,0.74,1);
+    glLineWidth(batterwidth);
+    glPointSize(batterwidth);
+    float tempvar1 = getXAfterRotation( a + 70, 70 + b, a  + 40, b + 92, bat_theta );
+    float tempvar2 = getYAfterRotation( a + 70, 70 + b, a  + 40, b + 92, bat_theta );
+    drawLine( a  + 40, b + 92 , tempvar1  , tempvar2  );
+    
+    
+    
+    //right arm
+    glColor3f(0,0.74,1);
+    glLineWidth(batterwidth);
+    glPointSize(batterwidth);
+    tempvar1 = getXAfterRotation( a + 70, 60 + b, a  + 40, b + 82, bat_theta );
+    tempvar2 = getYAfterRotation( a + 70, 60 + b, a  + 40, b + 82, bat_theta );
+    drawLine( a  + 40, b + 82 , tempvar1  , tempvar2  );
+
+    
+    int local_offset = 60;
+    // bat handle
+    float ax07 = getXAfterRotation( a + 7 + local_offset , 57 + b, a  + 40, b + 82, bat_theta );
+    float ay07 = getYAfterRotation( a + 7 + local_offset , 57 + b, a  + 40, b + 82, bat_theta );
+
+    float ax17 = getXAfterRotation( a + 7 +local_offset , 73 + b, a  + 40, b + 82, bat_theta );
+    float ay173 = getYAfterRotation( a + 7 + local_offset, 73 + b, a  + 40, b + 82, bat_theta );
+    
+    float ax213 = getXAfterRotation( a + 13 + local_offset, 73 + b, a  + 40, b + 82, bat_theta );
+    float ay273 = getYAfterRotation( a + 13 + local_offset , 73 + b, a  + 40, b + 82, bat_theta );
+
+    float ax413 = getXAfterRotation( a + 13 + local_offset, 57 + b, a  + 40, b + 82, bat_theta );
+    float ay457 = getYAfterRotation( a + 13 + local_offset , 57 + b, a  + 40, b + 82, bat_theta );
+
+    glBegin(GL_POLYGON);
+        glColor3f(0.64,0.164,0.164);
+        glVertex2f(ax07,ay07);
+        glVertex2f(ax17,ay173);
+        glVertex2f(ax213,ay273);
+        glVertex2f(ax413,ay457);
+        glColor3f(0,0,0);
+    glEnd();
+
+
+    // bat stick
+    float f0x = getXAfterRotation( a + 13 + local_offset, 57 + b, a  + 40, b + 82, bat_theta );
+    float f0y = getYAfterRotation( a + 13 + local_offset, 57 + b, a  + 40, b + 82, bat_theta );
+
+    float f1x = getXAfterRotation( a + 18 + local_offset , 53 + b, a  + 40, b + 82, bat_theta );
+    float f1y = getYAfterRotation( a + 18 + local_offset, 53 + b, a  + 40, b + 82, bat_theta );
+
+    float f2x = getXAfterRotation( a + 18 + local_offset, -5 + b, a  + 40, b + 82, bat_theta );
+    float f2y = getYAfterRotation( a + 18 + local_offset, -5 + b, a  + 40, b + 82, bat_theta );
+
+    float f3x = getXAfterRotation( a + 2 + local_offset, -5 + b, a  + 40, b + 82, bat_theta );
+    float f3y = getYAfterRotation( a + 2 + local_offset, -5 + b, a  + 40, b + 82, bat_theta );
+
+    float f4x = getXAfterRotation( a + 2 + local_offset, 53 + b, a  + 40, b + 82, bat_theta );
+    float f4y = getYAfterRotation( a + 2 + local_offset, 53 + b, a  + 40, b + 82, bat_theta );
+
+    float f5x = getXAfterRotation( a + 7 + local_offset, 57 + b, a  + 40, b + 82, bat_theta );
+    float f5y = getYAfterRotation( a + 7 + local_offset, 57 + b, a  + 40, b + 82, bat_theta );
+
+    glBegin(GL_POLYGON);
+        glColor3f(0.64,0.164,0.164);
+        glVertex2f(f0x,f0y);
+        glVertex2f(f1x,f1y);
+        glVertex2f(f2x,f2y);
+        glVertex2f(f3x,f3y);
+        glVertex2f(f4x,f4y);
+        glVertex2f(f5x,f5y);
+        glColor3f(0,0,0);
+    glEnd();
+
+    if(bat_theta > max_bat_angle){
+       called_one = 0;
+       bat_theta = 0;
+    }
+    else if(bat_theta!=0){
+        bat_theta += const_bat_add;
+    }
+    
+}
+
+float sbleftLeg  = 0, sbrightLeg = 0, sbrotateLegs = 0,sbatter_x_speed=0;
+void drawSecondBatsman(int a,int b){
+    checkBowlIncoming();
+
+    glColor3f(0,0.74,1);
+    glLineWidth(batterwidth);
+    glPointSize(batterwidth);
+    GLfloat x = 650 + a + sbatter_x_speed, y = 148 + b;
+    // head
+    drawFilledCircle( x + 40 ,117 + y,25);
+    
+    // torso
+    glColor3f(0,0.74,1);
+    glLineWidth(batterwidth);
+    glPointSize(batterwidth);
+    drawLine(x + 40, y + 92 , x + 40, 42 + y );
+
+    // legs
+    glColor3f(0,0.74,1);
+    glLineWidth(batterwidth);
+    glPointSize(batterwidth);
+    drawLine( x + sbleftLeg , y, x + 40, y + 42 );
+    glColor3f(0,0.74,1);
+    glLineWidth(batterwidth);
+    glPointSize(batterwidth);
+    drawLine( x + 70 + sbrightLeg , y  , x + 40, y + 42 );    
+
+
+    if( taking_run )
+    {
+        sbatter_x_speed -= batter_factor;
+        if(  sbrotateLegs <= blowlimit  )
+        {
+            sbleftLeg += batter_factor;
+            sbrightLeg -= batter_factor;
+        }   
+        else if(sbrotateLegs < buplimit  )
+        {
+            sbleftLeg -= batter_factor; 
+            sbrightLeg += batter_factor;
+        }
+        else if(sbrotateLegs >= buplimit)
+        {
+            sbrotateLegs = 0 ; 
+            sbleftLeg += batter_factor;
+            sbrightLeg -= batter_factor;
+        }
+        sbrotateLegs += 1 ;
+    }
+
+
+    // draw arms
+    draw_second_batsman_Arms(x,y,0);
+
+    load_default();
+}
 
 void drawWicket(int x,int y){
     float width = 3.9;
@@ -265,7 +434,7 @@ void drawBowlerArms(int a,int b){
             {
                 // Take One Run
                 app_state = 1;
-
+                taking_run = 1;
             }
         }
 
@@ -331,9 +500,8 @@ void drawBowler(int a,int b){
             rightLeg -= factor;
         }
         rotateLegs += 1 ;
-      
-
     }
+    
     load_default();
     glutPostRedisplay();
 }
@@ -529,6 +697,10 @@ void drawBatsman(){
     
     // batsman wicket
     drawWicket(-15,0);
+
+
+    drawSecondBatsman(0,0);
+
     //bowler wicket
     drawWicket(640,0);
 
