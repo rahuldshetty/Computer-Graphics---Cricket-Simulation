@@ -588,11 +588,11 @@ void drawStrings(){
         oldstring = clock();
     }
 
-    if(runs>target_score){
+    if(runs>=target_score){
         // team blue wins
         game_over = 1;
-        char new_score_text[100] = "Team INDIA Wins - Press R to Restart";
-        unsigned char new_score_string[100] = "Team INDIA Wins - Press R to Restart";
+        char new_score_text[100] = "Team India Wins - Press R to Restart";
+        unsigned char new_score_string[100] = "Team India Wins - Press R to Restart";
         void *localFont =  GLUT_BITMAP_8_BY_13;
         int size_string = glutBitmapLength(localFont, new_score_string);
         float newloc = 250 + (150 - size_string/2.0  );
@@ -603,7 +603,7 @@ void drawStrings(){
     }
     
     if(is_out){
-        if(wickets>=10 && runs<target_score){
+        if(wickets>=10 && runs<target_score-1){
             // team black wins
             game_over = 1;
             char new_score_text[100] = "Team England Wins - Press R to Restart";
@@ -615,7 +615,7 @@ void drawStrings(){
             load_default(); 
             return;
         }
-        else if(wickets>=10 && runs == target_score){
+        else if(wickets>=10 && runs == target_score-1){
             // match tie
             game_over = 1;
             char new_score_text[100] = "Game Draw - Press R to Restart";
