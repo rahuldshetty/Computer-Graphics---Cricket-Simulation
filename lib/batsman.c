@@ -617,6 +617,7 @@ void drawStrings(){
         }
         else if(wickets>=10 && runs == target_score-1){
             // match tie
+            
             game_over = 1;
             char new_score_text[100] = "Game Draw - Press R to Restart";
             unsigned char new_score_string[100] = "Game Draw - Press R to Restart";
