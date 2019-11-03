@@ -49,6 +49,9 @@ void moveBall(){
 }
 
 void draw_scene(){
+    
+    drawSkyBackground();
+
     // draw ground
     glColor3f(0,0.75,0.2);
     drawSquareP(0,200,800,0);
@@ -60,6 +63,7 @@ void draw_scene(){
     drawBall();
 
     moveBall();
+    
 
     load_default();
 }

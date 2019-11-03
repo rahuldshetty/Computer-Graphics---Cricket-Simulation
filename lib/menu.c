@@ -34,6 +34,8 @@ void drawPressToStart(){
     }
 }
 
+
+
 void drawMenu(){
     
     glColor3f(1.0,0.0,0.0);

@@ -121,6 +121,16 @@ float getXAfterRotation(float x,float y, float pivotx, float pivoty, float theta
 	return effective;
 }
 
+void drawSkyBackground(){
+    glBegin(GL_POLYGON);
+        glColor3f(0.8959,0.9296,0.9725);
+        glVertex2f(0,800);
+        glVertex2f(800,800);
+        glColor3f(1,1,1);
+        glVertex2f(800,0);
+        glVertex2f(0,0);
+    glEnd();
+}
 
 float getYAfterRotation(float x,float y, float pivotx, float pivoty, float theta){
 	// convert to radians

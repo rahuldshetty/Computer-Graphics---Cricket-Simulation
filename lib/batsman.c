@@ -19,6 +19,17 @@ float bowler_x_speed = 0, bowler_y_speed = 0,factor = 0.8;
 float leftLeg  = 0, rightLeg = 0;
 int rotateLegs = 0,lowlimit = 300 * (0.2/factor) ,uplimit = 750 * (0.2/factor);
 
+// run components
+int taking_run = 0;
+float batter_x_speed=0;
+float batter_factor = 1.2;
+float bleftLeg  = 0, brightLeg = 0, brotateLegs = 0;
+float blowlimit =  300 * (0.2/batter_factor) ,buplimit =  600 * (0.2/batter_factor);
+
+// wicket fall
+int wicket_offset_1 = 0, wicket_offset_2=0,wicket_offset_3=0;
+int is_out = 0,game_over = 0;
+
 clock_t oldstring = clock();
 
 //key check
@@ -113,6 +124,22 @@ void checkBowlIncoming(){
 }
 
 void checkBallHit(float a,float b){
+    if(old_key=='0' && ballposx <= 80 && isthrown ==1 ){
+
+        if( wicket_offset_3 > 10)
+        {
+            return;
+        }
+        
+        // change the wicket position
+        wicket_offset_1 -= 4;
+        wicket_offset_2 -= 2;
+        wicket_offset_3 += 2;
+
+        return;
+        
+    }
+    
     float res = getXAfterRotation( a + 2, -5 + b, a  + 40, b + 82, bat_theta );
     if(ballposx < res && isthrown==1 )
     {
@@ -122,11 +149,7 @@ void checkBallHit(float a,float b){
     }
 }
 
-int taking_run = 0;
-float batter_x_speed=0;
-float batter_factor = 1.2;
-float bleftLeg  = 0, brightLeg = 0, brotateLegs = 0;
-float blowlimit =  300 * (0.2/batter_factor) ,buplimit =  600 * (0.2/batter_factor);
+
 void drawBatter(int a,int b){
 
     checkBowlIncoming();
@@ -337,17 +360,18 @@ void drawSecondBatsman(int a,int b){
     load_default();
 }
 
-void drawWicket(int x,int y){
+
+void drawWicket(int x,int y,int wicket_offset_1,int wicket_offset_2,int wicket_offset_3){   
     float width = 3.9;
     glLineWidth(width);
-    drawLine( 50 + x, y + 148 , x + 50 , y + 215 );
+    drawLine( 50 + x, y + 148 , x + 50 + wicket_offset_1 , y + 215 + wicket_offset_1 );
     glLineWidth(width);
-    drawLine( 58 + x, y + 148 + 5 , x + 58 , y + 215 + 5 );
+    drawLine( 58 + x, y + 148 + 5 , x + 58 + wicket_offset_2 , y + 215 + 5 + wicket_offset_2 );
     glLineWidth(width);
-    drawLine( 66 + x, y + 148 + 10 , x + 66 , y + 215 + 10 );
+    drawLine( 66 + x, y + 148 + 10 , x + 66 + wicket_offset_3 , y + 215 + 10 + wicket_offset_3 );
 
     glLineWidth(width-1.2);
-    drawLine( 50 + x, y + 215  , x + 66 , y + 215 + 10 );
+    drawLine( 50 + x + wicket_offset_2 , y + 215 + wicket_offset_2  , x + 66 , y + 215 + 10 );
 }
 
 
@@ -381,7 +405,8 @@ void drawBowlerArms(int a,int b){
         }
         else if(theta>250){
             // throw the ball
-            called_one = 1;
+            if(old_key!='0')
+                called_one = 1;
             theta = 0;
             isthrown = 1;
             ballposx = tx;
@@ -420,6 +445,10 @@ void drawBowlerArms(int a,int b){
             ballspeedx = -8;
             ballspeedy = -2;
             factor = 0.8;
+            if(old_key=='0' && is_out==0){
+                is_out = 1;
+                wickets+=1;
+            }                
         }   
 
         if(ballposx >= 800)
@@ -446,6 +475,11 @@ void drawBowlerArms(int a,int b){
                 // Take One Run
                 app_state = 1;
                 taking_run = 1;
+            }
+            else if(old_key=='0'){
+                // wicket out
+                app_state = 1;
+    
             }
         }
 
@@ -494,7 +528,7 @@ void drawBowler(int a,int b){
     else if( bowler_x_speed <= -factor)
     {
         bowler_x_speed -= factor;
-        if(  rotateLegs <= lowlimit  )
+        if(  rotateLegs <= lowlimit  )  
         {
             leftLeg += factor;
             rightLeg -= factor;
@@ -540,8 +574,9 @@ void drawLights(int x,int y)
     load_default();
 }
 
-void drawStrings(){
 
+void drawStrings(){
+    void *fontMenu = GLUT_BITMAP_9_BY_15;
     if( conv2seconds(clock() - oldstring ) < 0.5  )
     {
         glColor3f(1,1,1);
@@ -553,8 +588,59 @@ void drawStrings(){
         oldstring = clock();
     }
 
+    if(runs>target_score){
+        // team blue wins
+        game_over = 1;
+        char new_score_text[100] = "Team INDIA Wins - Press R to Restart";
+        unsigned char new_score_string[100] = "Team INDIA Wins - Press R to Restart";
+        void *localFont =  GLUT_BITMAP_8_BY_13;
+        int size_string = glutBitmapLength(localFont, new_score_string);
+        float newloc = 250 + (150 - size_string/2.0  );
+        drawBitmapText(new_score_text, newloc, 420 , 0 ,localFont);
+        load_default(); 
+        return;
 
-    void *fontMenu = GLUT_BITMAP_9_BY_15;
+    }
+    
+    if(is_out){
+        if(wickets>=10 && runs<target_score){
+            // team black wins
+            game_over = 1;
+            char new_score_text[100] = "Team England Wins - Press R to Restart";
+            unsigned char new_score_string[100] = "Team England Wins - Press R to Restart";
+            void *localFont =  GLUT_BITMAP_8_BY_13;
+            int size_string = glutBitmapLength(localFont, new_score_string);
+            float newloc = 250 + (150 - size_string/2.0  );
+            drawBitmapText(new_score_text, newloc, 420 , 0 ,localFont);
+            load_default(); 
+            return;
+        }
+        else if(wickets>=10 && runs == target_score){
+            // match tie
+            game_over = 1;
+            char new_score_text[100] = "Game Draw - Press R to Restart";
+            unsigned char new_score_string[100] = "Game Draw - Press R to Restart";
+            void *localFont =  GLUT_BITMAP_8_BY_13;
+            int size_string = glutBitmapLength(localFont, new_score_string);
+            float newloc = 250 + (150 - size_string/2.0  );
+            drawBitmapText(new_score_text, newloc, 420 , 0 ,localFont);
+            load_default(); 
+            return;
+        }
+        else{
+            char new_score_text[100] = "OUT - Press A to Continue";
+            unsigned char new_score_string[100] = "OUT - Press A to Continue";
+            void *localFont =  GLUT_BITMAP_9_BY_15;
+            int size_string = glutBitmapLength(localFont, new_score_string);
+            float newloc = 250 + (150 - size_string/2.0  );
+            drawBitmapText(new_score_text, newloc, 420 , 0 ,localFont);
+            load_default(); 
+            return;
+        }
+        
+
+    }
+   
     char match_name[] = "INDIA VS ENGLAND";
     unsigned char string[] = "INDIA VS ENGLAND";
     int size_string = glutBitmapLength(fontMenu, string);
@@ -576,10 +662,41 @@ void drawStrings(){
         tlen++ ;
     }
 
-
     size_string = glutBitmapLength(fontMenu, new_score_string);
     newloc = 250 + (150 - size_string/2.0  );
     drawBitmapText(new_score_text, newloc, 430 , 0 ,fontMenu);
+
+    // target score
+    sprintf(result, "%d", target_score);
+    char new_target_text[100] = "Target: ";
+    unsigned char new_target_string[100] = "Target: ";
+    tlen = 8;
+    for(int i = 0; result[i]!='\0';i++ ){
+        new_target_text[tlen] = result[i];
+        new_target_string[tlen] = result[i];
+        tlen++ ;
+    }
+
+    size_string = glutBitmapLength(fontMenu, new_target_string);
+    newloc = 250 + (150 - size_string/2.0  );
+    drawBitmapText(new_target_text, newloc, 410 , 0 ,fontMenu);
+
+    // wickets down
+    sprintf(result, "%d", wickets);
+    char new_wicket_text[100] = "Wickets: ";
+    unsigned char new_wicket_string[100] = "Wickets: ";
+    tlen = 9;
+    for(int i = 0; result[i]!='\0';i++ ){
+        new_wicket_text[tlen] = result[i];
+        new_wicket_string[tlen] = result[i];
+        tlen++ ;
+    }
+
+    size_string = glutBitmapLength(fontMenu, new_wicket_string);
+    newloc = 250 + (150 - size_string/2.0  );
+    drawBitmapText(new_wicket_text, newloc, 390 , 0 ,fontMenu);
+
+    
 
     load_default(); 
 }
@@ -668,17 +785,20 @@ void drawStadium(int show_score){
         // blinking text effect
         drawStrings();
 
-        // draw net
-        glColor3f(1,1,1);
-        drawMesh( 0,200 );
     }
-    
+        
+     // draw net
+    glColor3f(1,1,1);
+    drawMesh( 0,200 );
+
 }
 
 
 void drawBatsman(){
+    
     glColor3f(1.0,0.0,0.0);
     
+    drawSkyBackground();
 
     // draw ground
     glColor3f(0,0.75,0.2);
@@ -707,13 +827,13 @@ void drawBatsman(){
     drawLine(640,160,630,125);
     
     // batsman wicket
-    drawWicket(-15,0);
+    drawWicket(-15,0,wicket_offset_1,wicket_offset_2,wicket_offset_3);
 
 
     drawSecondBatsman(0,0);
 
     //bowler wicket
-    drawWicket(640,0);
+    drawWicket(640,0,0,0,0);
 
     drawBowler(0,0);
     
@@ -724,10 +844,27 @@ void drawBatsman(){
 
 
 int handleGameKey(unsigned char key){
-    if(key == 's' || key =='S' || key=='4' || key=='6' || key=='1')  
+        
+    if((key == 's' || key =='S' || key=='4' || key=='6' || key=='1' || key=='0') && is_out==0 && game_over==0)  
     {
         bowler_x_speed -= factor;
         theta += rot_speed;
+    }
+    else if((key=='a'||key=='A') && game_over==0 )
+    {
+        is_out = 0;
+        wicket_offset_1 = 0;
+        wicket_offset_2 = 0;
+        wicket_offset_3 = 0;
+    }
+    else if(game_over==1 && (key=='R' || key=='r')){
+        game_over = 0;
+        is_out = 0;
+        wicket_offset_1 = 0;
+        wicket_offset_2 = 0;
+        wicket_offset_3 = 0;
+        restart_game();
+
     }
     old_key = key;
     return 1;
